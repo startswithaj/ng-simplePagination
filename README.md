@@ -31,11 +31,28 @@ This defaults to 5 items per page. You can pass an optional parameter with the n
 ```
 $scope.pagination = Pagination.getNew(10);
 ```
+You can also pass in the number of items you will be displaying and it will calculate and set the number of pages. Here's an example with a pre-defined `$scope.posts` array for a blog application:
+```
+$scope.pagination = Pagination.getNew(10, $scope.posts.length);
+```
+If you want to limit the number of pages you can pass in a max number of pages parameter. This will use your specified perPage number unless it cannot fit all the items within your specified max number of pages.
 
-Finally, calculate and set the number of pages depending on your data. Here's an example with a pre-defined `$scope.posts` array for a blog application:
+```
+$scope.pagination = Pagination.getNew(10, $scope.posts.length, 3);
+```
+In the above example if $scope.posts.length is equal to 36. The number per page will be 12, so they all fit on 3 pages. If $scope.posts.length is 20 there will be 2 pages of 10.
+
+To calculate and set the number of pages manually depending on your data.
 
 ```
 $scope.pagination.numPages = Math.ceil($scope.posts.length/$scope.pagination.perPage);
+```
+
+To automatically set the number of pages
+```
+$scope.pagination.setNumPages(perPage, nItems, nMaxPages);
+$scope.pagination.setNumPages(10, $scope.posts.length);
+$scope.pagination.setNumPages(10, $scope.posts.length, 15);
 ```
 
 Replace `$scope.posts` with whatever data you have initialised.
@@ -74,6 +91,13 @@ Using another built-in filter called `range`:
   </li>
   <li><a href="" ng-click="pagination.nextPage()">&raquo;</a></li>
 </ul>
+```
+
+### Show all
+Sometimes a user may want to see the entire list unpaginated. Paginator has a function that will remove pagination showAll(). Pagination can be reinstated by called setNumPages again with the required params.
+```
+<li><a href="" ng-click="pagination.showAll()">Show All</a></li>
+<li><a href="" ng-click="pagination.setNumPages(10, posts.length)">Show paginated</a></li>
 ```
 
 If you use, bootstrap.css, Above given list HTML coding give good appearance. Note that the first page is actually __0__ hence the {{n + 1}}.

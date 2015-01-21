@@ -7,7 +7,7 @@
 
     var pagination = {};
 
-    pagination.getNew = function(perPage) {
+    pagination.getNew = function(perPage, nItems, nMaxPages) {
 
       perPage = perPage === undefined ? 5 : perPage;
 
@@ -16,6 +16,28 @@
         perPage: perPage,
         page: 0
       };
+
+      paginator.setNumPages = function(perPage, nItems, nMaxPages) {
+        var perPage = perPage || paginator.perPage
+        var numPages = Math.ceil(nItems/perPage)
+
+        if (nMaxPages && numPages > nMaxPages) {
+          numPages = nMaxPages
+          perPage = Math.ceil(nItems / nMaxPages)
+        }
+
+        paginator.perPage = perPage
+        paginator.numPages = numPages
+      }
+
+      if (nItems)
+        paginator.setNumPages(perPage, nItems, nMaxPages);
+
+      paginator.showAll = function(nItems) {
+        paginator.page = 0
+        paginator.numPages = 0
+        paginator.perPage = nItems
+      }
 
       paginator.prevPage = function() {
         if (paginator.page > 0) {
